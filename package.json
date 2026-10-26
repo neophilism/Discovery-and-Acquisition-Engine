@@ -15,6 +15,10 @@
     "./collection": {
       "types": "./dist/collection.d.ts",
       "default": "./dist/collection.js"
+    },
+    "./connectors": {
+      "types": "./dist/connectors.d.ts",
+      "default": "./dist/connectors.js"
     }
   },
   "engines": {
