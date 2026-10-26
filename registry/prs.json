@@ -4,7 +4,7 @@
   "roadmapVersion": 1,
   "planVerified": true,
   "plannedPrCount": 6,
-  "observedAt": "2026-10-26T20:32:27Z",
+  "observedAt": "2026-10-26T23:52:41Z",
   "units": [
     {
       "id": "DAE-001",
@@ -49,7 +49,9 @@
       "title": "Connector SDK and archive adapters",
       "origin": "original",
       "prs": [],
-      "contributingPrs": [],
+      "contributingPrs": [
+        4
+      ],
       "dependsOn": [
         "DAE-002"
       ],
@@ -59,7 +61,7 @@
         "Connector SDK and archive adapters"
       ],
       "acceptanceCriteria": "Verify required behavior, rejection paths, source-bound test evidence and private defaults; live acceptance remains separate.",
-      "implementationStatus": "planned"
+      "implementationStatus": "Partial: PR4 implements the connector SDK and bounded JSON archive catalog adapter with exact provenance and separately authorized acquisition proposals. Provider-specific archive APIs, WARC/ZIP parsing, cross-page durable orchestration and live qualification remain pending."
     },
     {
       "id": "DAE-004",

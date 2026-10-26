@@ -1,7 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { JsonArchiveConnector, decodeJsonArchive } from '../src/connectors.ts';
-import { capture } from '../src/index.ts';
 import { createCollection } from '../src/collection.ts';
 import { hashBytes } from '../src/contracts.ts';
 import type { Context } from '../src/contracts.ts';
