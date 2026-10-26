@@ -4,7 +4,7 @@ This library captures one explicitly approved HTTPS source at a time. Source pol
 
 Captured exact bytes carry request/final URLs, retrieval time, redirects, response metadata and SHA256. A capture is not a factual conclusion or permission to publish. Captured files must enter evidence quarantine before processing. Tests inject DNS and transport; no live capture is required.
 
-Current limits: IPv4 HTTPS only, four explicit MIME types, no bulk crawler, archive API adapters, robots-policy evaluator, durable queue or UI yet. Policy is trusted deployment configuration and must be enforced by an authenticated action gateway. A bounded total deadline covers DNS resolution, redirects and transport awaits. Cancellation reaches the transport; a timed-out resolver can never later start a transport call. Native DNS may continue its underlying OS query after the awaiting capture has failed; deployment concurrency limits remain required. Future work is retained in registry/prs.json.
+Current limits: IPv4 HTTPS only, four explicit MIME types, no bulk crawler, provider-specific archive API adapters, robots-policy evaluator, durable queue or UI yet. The opt-in JSON archive catalog adapter and connector SDK are described in CONNECTORS.md. Policy is trusted deployment configuration and must be enforced by an authenticated action gateway. A bounded total deadline covers DNS resolution, redirects and transport awaits. Cancellation reaches the transport; a timed-out resolver can never later start a transport call. Native DNS may continue its underlying OS query after the awaiting capture has failed; deployment concurrency limits remain required. Future work is retained in registry/prs.json.
 
 ## Collection acquisition contract
 
