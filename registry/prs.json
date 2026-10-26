@@ -4,7 +4,7 @@
   "roadmapVersion": 1,
   "planVerified": true,
   "plannedPrCount": 6,
-  "observedAt": "2026-10-26T18:50:00Z",
+  "observedAt": "2026-10-26T20:32:27Z",
   "units": [
     {
       "id": "DAE-001",
@@ -12,7 +12,8 @@
       "origin": "original",
       "prs": [],
       "contributingPrs": [
-        1
+        1,
+        3
       ],
       "dependsOn": [],
       "externalDependencies": [],
@@ -21,7 +22,7 @@
         "Approved source policy and bounded HTTPS capture"
       ],
       "acceptanceCriteria": "Verify required behavior, rejection paths, source-bound test evidence and private defaults; live acceptance remains separate.",
-      "implementationStatus": "library_implemented_local_and_ci_passed"
+      "implementationStatus": "Foundation merged; PR3 adds total async deadline, cancellation, immutable admission and byte ownership with adversarial tests. Live network acceptance remains separate."
     },
     {
       "id": "DAE-002",
@@ -29,7 +30,8 @@
       "origin": "original",
       "prs": [],
       "contributingPrs": [
-        1
+        1,
+        3
       ],
       "dependsOn": [
         "DAE-001"
@@ -40,7 +42,7 @@
         "Capture provenance and redirect/address defenses"
       ],
       "acceptanceCriteria": "Verify required behavior, rejection paths, source-bound test evidence and private defaults; live acceptance remains separate.",
-      "implementationStatus": "library_implemented_local_and_ci_passed"
+      "implementationStatus": "Foundation merged; PR3 adds total async deadline, cancellation, immutable admission and byte ownership with adversarial tests. Live network acceptance remains separate."
     },
     {
       "id": "DAE-003",
@@ -64,7 +66,9 @@
       "title": "Bulk acquisition and refresh coverage",
       "origin": "original",
       "prs": [],
-      "contributingPrs": [],
+      "contributingPrs": [
+        2
+      ],
       "dependsOn": [
         "DAE-003"
       ],
@@ -74,7 +78,7 @@
         "Bulk acquisition and refresh coverage"
       ],
       "acceptanceCriteria": "Verify required behavior, rejection paths, source-bound test evidence and private defaults; live acceptance remains separate.",
-      "implementationStatus": "planned"
+      "implementationStatus": "Partial collection/refresh/coverage domain library merged in PR2; bulk connector workers and durable scheduling remain pending."
     },
     {
       "id": "DAE-005",
