@@ -11,6 +11,10 @@
     "./contracts": {
       "types": "./dist/contracts.d.ts",
       "default": "./dist/contracts.js"
+    },
+    "./collection": {
+      "types": "./dist/collection.d.ts",
+      "default": "./dist/collection.js"
     }
   },
   "engines": {

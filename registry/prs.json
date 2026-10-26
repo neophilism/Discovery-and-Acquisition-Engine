@@ -11,7 +11,9 @@
       "title": "Approved source policy and bounded HTTPS capture",
       "origin": "original",
       "prs": [],
-      "contributingPrs": [],
+      "contributingPrs": [
+        1
+      ],
       "dependsOn": [],
       "externalDependencies": [],
       "externalPrerequisites": [],
@@ -19,14 +21,16 @@
         "Approved source policy and bounded HTTPS capture"
       ],
       "acceptanceCriteria": "Verify required behavior, rejection paths, source-bound test evidence and private defaults; live acceptance remains separate.",
-      "implementationStatus": "planned"
+      "implementationStatus": "library_implemented_local_and_ci_passed"
     },
     {
       "id": "DAE-002",
       "title": "Capture provenance and redirect/address defenses",
       "origin": "original",
       "prs": [],
-      "contributingPrs": [],
+      "contributingPrs": [
+        1
+      ],
       "dependsOn": [
         "DAE-001"
       ],
@@ -36,7 +40,7 @@
         "Capture provenance and redirect/address defenses"
       ],
       "acceptanceCriteria": "Verify required behavior, rejection paths, source-bound test evidence and private defaults; live acceptance remains separate.",
-      "implementationStatus": "planned"
+      "implementationStatus": "library_implemented_local_and_ci_passed"
     },
     {
       "id": "DAE-003",
