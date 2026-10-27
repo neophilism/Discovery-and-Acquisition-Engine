@@ -327,3 +327,49 @@ test("transaction rollback and persistent restart preserve scheduling fences and
     { code: "lease_consumed" },
   );
 });
+test("outcome verifier receives exact receipt edition, capture metadata, purpose and immutable attempt binding", async (t) => {
+  const checks: import("../src/scheduler.ts").OutcomeCheck[] = [];
+  const s = await setup(t, {
+    verify: async (check) => {
+      checks.push(structuredClone(check));
+      check.capture!.finalUrl = "https://mutated.example/";
+      return true;
+    },
+  });
+  const l = await s.store.leaseNext(worker, "collection", 1, "lease");
+  const work = await s.store.consume(
+    worker,
+    "collection",
+    l.snapshot.revision,
+    l.lease.token,
+  );
+  const input = { capture: capture(), receipt };
+  const done = await s.store.complete(
+    worker,
+    "collection",
+    work.revision,
+    l.lease.token,
+    input,
+    "done",
+  );
+  assert.equal(checks[0]!.acquisitionKey, work.acquisitionKey);
+  assert.equal(checks[0]!.attemptId, work.attemptId);
+  assert.equal(checks[0]!.purpose, worker.purpose);
+  assert.deepEqual(checks[0]!.receipt, receipt);
+  assert.equal(checks[0]!.capture!.byteLength, input.capture.bytes.length);
+  assert.equal(checks[0]!.capture!.finalUrl, input.capture.finalUrl);
+  assert.equal(checks[0]!.failureCode, null);
+  assert.equal(input.capture.finalUrl, "https://records.example/a");
+  assert.equal(done.state.collection.attempts[0]!.sha256, input.capture.sha256);
+  await assert.rejects(
+    s.store.complete(
+      worker,
+      "collection",
+      work.revision,
+      l.lease.token,
+      { ...input, receipt: { ...receipt, revision: 3 } },
+      "done",
+    ),
+    { code: "idempotency_conflict" },
+  );
+});

@@ -57,6 +57,10 @@ export type OutcomeCheck = Scope & {
   outcome: "captured" | "no-capture";
   sourceSha256: string | null;
   receipt: Ref;
+  purpose: string;
+  acquisitionKey: string;
+  capture: (Omit<Capture, "bytes"> & { byteLength: number }) | null;
+  failureCode: string | null;
 };
 export type OutcomeVerifier = {
   verify(check: OutcomeCheck, signal: AbortSignal): Promise<boolean>;
@@ -395,13 +399,26 @@ export class AcquisitionScheduler {
     const capture = "capture" in result ? result.capture : null;
     if (capture)
       invariant(
-        capture.bytes.length <= 25 * 1024 * 1024 &&
+        capture.status === 200 &&
+          [
+            "text/plain",
+            "text/html",
+            "application/json",
+            "application/pdf",
+          ].includes(capture.contentType) &&
+          capture.bytes.length <= 25 * 1024 * 1024 &&
           hashBytes(capture.bytes) === capture.sha256,
         "integrity_failure",
         "Outcome bytes differ",
       );
     // Fingerprint exact metadata and digest, not a JSON expansion of binary bytes.
-    const fingerprint = capture ? { ...capture, bytes: null } : result;
+    const descriptor = capture
+      ? (({ bytes, ...metadata }) => ({
+          ...metadata,
+          byteLength: bytes.length,
+        }))(capture)
+      : null;
+    const fingerprint = descriptor ?? result;
     return scoped(this.#db, c, (tx) =>
       tx.idempotent(
         commandId,
@@ -445,6 +462,14 @@ export class AcquisitionScheduler {
               outcome: capture ? "captured" : "no-capture",
               sourceSha256: capture?.sha256 ?? null,
               receipt: result.receipt,
+              purpose: c.purpose,
+              acquisitionKey: acquisitionKey(
+                collection,
+                item.id,
+                lease.attemptId,
+              ),
+              capture: descriptor,
+              failureCode: "failureCode" in result ? result.failureCode : null,
             }),
             "receipt_denied",
             "Outcome receipt does not verify this attempt",
