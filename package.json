@@ -23,6 +23,10 @@
     "./scheduler": {
       "types": "./dist/scheduler.d.ts",
       "default": "./dist/scheduler.js"
+    },
+    "./catalog-traversal": {
+      "types": "./dist/catalog-traversal.d.ts",
+      "default": "./dist/catalog-traversal.js"
     }
   },
   "engines": {
