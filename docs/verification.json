@@ -1,6 +1,6 @@
 {
   "stage": "local",
-  "testsPassed": 28,
+  "testsPassed": 34,
   "independentHumanAudit": "not_performed_owner_allows_ai_review",
   "liveAcceptance": "not_performed",
   "commands": [
@@ -11,7 +11,8 @@
     "src/index.ts": "bce072958c8aee9657cb22bbd53d1c62fdd60c89b9285fdcf360bbafbf6c4126",
     "src/collection.ts": "53eea16d9cd6f8624f6124bd0e455e46c2e843f150acf6e04990fbc776839d45",
     "src/connectors.ts": "c874655a28f3177bb108ef760d93e4b91263b66601ed3fb32ed9265e98270535",
-    "src/scheduler.ts": "ed55711b803d90a4cfd88bfff2d353f7e78eb8072719dda324d09bbc495756ca"
+    "src/scheduler.ts": "ed55711b803d90a4cfd88bfff2d353f7e78eb8072719dda324d09bbc495756ca",
+    "src/catalog-traversal.ts": "eb0ddc9f82eba7e65a27692be1d9c75fc321a178fa7bc8d0f40a275f8eff20ec"
   },
   "limits": [
     "PGlite restricted roles and persistent reopen do not establish independent wire sessions.",

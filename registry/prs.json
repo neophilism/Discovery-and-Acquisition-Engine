@@ -4,7 +4,7 @@
   "roadmapVersion": 1,
   "planVerified": true,
   "plannedPrCount": 6,
-  "observedAt": "2026-10-27T00:05:47Z",
+  "observedAt": "2026-10-27T00:56:50Z",
   "units": [
     {
       "id": "DAE-001",
@@ -50,7 +50,8 @@
       "origin": "original",
       "prs": [],
       "contributingPrs": [
-        4
+        4,
+        6
       ],
       "dependsOn": [
         "DAE-002"
@@ -61,7 +62,7 @@
         "Connector SDK and archive adapters"
       ],
       "acceptanceCriteria": "Verify required behavior, rejection paths, source-bound test evidence and private defaults; live acceptance remains separate.",
-      "implementationStatus": "Partial: PR4 implements the connector SDK and bounded JSON archive catalog adapter with exact provenance and separately authorized acquisition proposals. Provider-specific archive APIs, WARC/ZIP parsing, cross-page durable orchestration and live qualification remain pending."
+      "implementationStatus": "Partial: PR4 implements the connector SDK and bounded JSON archive catalog adapter with exact provenance and separately authorized acquisition proposals. Provider-specific archive APIs, WARC/ZIP parsing, cross-page durable orchestration and live qualification remain pending. PR6 adds bounded explicit in-memory cross-page planning with provenance-preserving reconciliation and loop fencing; durable traversal/provider APIs and live qualification remain pending."
     },
     {
       "id": "DAE-004",
@@ -70,7 +71,8 @@
       "prs": [],
       "contributingPrs": [
         2,
-        5
+        5,
+        6
       ],
       "dependsOn": [
         "DAE-003"
@@ -81,7 +83,7 @@
         "Bulk acquisition and refresh coverage"
       ],
       "acceptanceCriteria": "Verify required behavior, rejection paths, source-bound test evidence and private defaults; live acceptance remains separate.",
-      "implementationStatus": "Partial collection/refresh/coverage domain library in PR2; PR5 supplies durable scheduling and conservative recovery for approved collections. Bulk connector orchestration, deployed workers and live qualification remain pending."
+      "implementationStatus": "Partial collection/refresh/coverage domain library in PR2; PR5 supplies durable scheduling and conservative recovery for approved collections. Bulk connector orchestration, deployed workers and live qualification remain pending. PR6 adds bounded explicit in-memory cross-page planning with provenance-preserving reconciliation and loop fencing; durable traversal/provider APIs and live qualification remain pending."
     },
     {
       "id": "DAE-005",
