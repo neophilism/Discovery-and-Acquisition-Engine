@@ -19,3 +19,7 @@ Capture snapshots authenticated context, source policy and configured resolver/t
 A custom adapter is trusted deployment code and must honor the signal and constrain its own resources. The wrapper bounds awaiting it but cannot terminate arbitrary noncooperating code or an OS DNS request. Tests use fictional URLs and injected dependencies only; no live capture, DNS/TLS integration acceptance or durable scheduling is claimed. Scope/expiry admission is a captured capability decision for this bounded attempt; a future gateway must coordinate mid-flight revocation if required.
 
 Native transport qualification also uses a local ephemeral TLS server and a child-specific test CA, without disabling hostname verification. It checks the actual pinned lookup, Host authority, wrong-host certificate rejection, oversized response, compressed response and cancellation. This intentionally invokes the transport directly with a loopback pin for the test; the public capture URL/address layer continues to reject loopback. No external endpoint or global trust-store change is used. The test requires the Node 24 runtime and `/usr/bin/openssl`, both available in CI.
+
+## Durable scheduler adapter
+
+The opt-in `./scheduler` adapter persists approved collection scheduling, actor-bound leases, one-shot work consumption, verified outcomes and uncertainty recovery in its own operational database. See SCHEDULER.md for trusted-host contracts, database roles, worker obligations and qualification limits. A deployed worker daemon and external receipt-service integration remain separate.
