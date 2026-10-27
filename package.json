@@ -19,6 +19,10 @@
     "./connectors": {
       "types": "./dist/connectors.d.ts",
       "default": "./dist/connectors.js"
+    },
+    "./scheduler": {
+      "types": "./dist/scheduler.d.ts",
+      "default": "./dist/scheduler.js"
     }
   },
   "engines": {
@@ -33,11 +37,15 @@
   },
   "devDependencies": {
     "@types/node": "26.6.5",
-    "typescript": "7.0.2"
+    "typescript": "7.0.2",
+    "@electric-sql/pglite": "0.5.12"
   },
   "files": [
     "dist",
     "README.md",
     "docs"
-  ]
+  ],
+  "dependencies": {
+    "@accountability/evidence": "git+https://github.com/neophilism/Evidence-Storage-and-Provenance-Engine.git#dce7105a70b42d77afe4cd48d34723331447037c"
+  }
 }
