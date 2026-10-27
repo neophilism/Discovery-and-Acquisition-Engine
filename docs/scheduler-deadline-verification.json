@@ -1,0 +1,32 @@
+{
+  "stage": "local",
+  "ordinaryTestsPassed": 38,
+  "newRestrictedMigrationGroups": 4,
+  "baseline": {
+    "source": "b0b88c81f8ee62cdc03b213d847a255e4fc678df",
+    "failed": 3,
+    "passed": 1,
+    "behavior": "blocked late captured/no-capture outcomes committed and success signal remained open"
+  },
+  "sourceHashes": {
+    "src/scheduler.ts": "48eba159fcf2e5b0b3175d63a57e15c82325202fcfdec5391e90876e3dbb9417",
+    "tests/scheduler-deadline.test.ts": "3d76570a25f6fab7ff23a04d62eb66f3bee0a908bb2483620ce7220a3b6319f2",
+    "src/contracts.ts": "d86141cb7546a723f837a298e4ea6fef62692918f78f5aab2d72d6639987fcc5"
+  },
+  "installedPackage": "All 11 scheduler/deadline groups pass through freshly packed installed compiled public exports",
+  "finalHeadCi": "required_before_merge",
+  "independentSqlNetworkSessionsRealReceiptLivenessWorkerDeployment": "not_performed",
+  "limits": [
+    "cannot preempt synchronous JS or undo callback effects",
+    "begun SQL awaited; deadline bounds result acceptance",
+    "cached acknowledgement is historical, not fresh proof or execution authority",
+    "no new clock/gateway/receipt/liveness/daemon integration"
+  ],
+  "initialSourceCi": {
+    "source": "03b2cacd125cc744dba8e525f5fdec98cb9189af",
+    "run": 40585534725,
+    "job": 122475823408,
+    "ordinaryPassed": 38,
+    "logsInspected": true
+  }
+}

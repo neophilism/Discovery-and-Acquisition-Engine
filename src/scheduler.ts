@@ -354,19 +354,39 @@ export class AcquisitionScheduler {
     });
   }
   async #verified(check: OutcomeCheck): Promise<boolean> {
-    const controller = new AbortController();
+    const controller = new AbortController(),
+      timeout = this.#policy.receiptTimeoutMs ?? 5000,
+      deadline = performance.now() + timeout;
     let timer: ReturnType<typeof setTimeout> | undefined;
+    const gate = () => {
+      invariant(
+        !controller.signal.aborted && performance.now() < deadline,
+        "receipt_timeout",
+        "Outcome verification timed out",
+      );
+    };
     try {
       return await Promise.race([
         Promise.resolve()
-          .then(() => this.#verify(structuredClone(check), controller.signal))
-          .then((v) => v === true)
-          .catch(() => {
-            throw new DomainError(
-              "receipt_unavailable",
-              "Outcome verifier could not complete",
-            );
-          }),
+          .then(() => {
+            gate();
+            const captured = structuredClone(check);
+            gate();
+            return this.#verify(captured, controller.signal);
+          })
+          .then(
+            (value) => {
+              gate();
+              return value === true;
+            },
+            () => {
+              gate();
+              throw new DomainError(
+                "receipt_unavailable",
+                "Outcome verifier could not complete",
+              );
+            },
+          ),
         new Promise<boolean>((_, reject) => {
           timer = setTimeout(() => {
             controller.abort();
@@ -376,13 +396,15 @@ export class AcquisitionScheduler {
                 "Outcome verification timed out",
               ),
             );
-          }, this.#policy.receiptTimeoutMs ?? 5000);
+          }, timeout);
         }),
       ]);
     } finally {
       if (timer) clearTimeout(timer);
+      controller.abort();
     }
   }
+
   async complete(
     context: Context,
     id: string,

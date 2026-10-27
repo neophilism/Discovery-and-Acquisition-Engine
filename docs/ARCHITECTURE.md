@@ -23,3 +23,5 @@ Native transport qualification also uses a local ephemeral TLS server and a chil
 ## Durable scheduler adapter
 
 The opt-in `./scheduler` adapter persists approved collection scheduling, actor-bound leases, one-shot work consumption, verified outcomes and uncertainty recovery in its own operational database. See SCHEDULER.md for trusted-host contracts, database roles, worker obligations and qualification limits. A deployed worker daemon and external receipt-service integration remain separate.
+
+Receipt completion verification uses monotonic admission/result fences in addition to its timer, closes owned signals on every exit and sanitizes callback errors. A reproduced blocked-event-loop late result cannot commit captured/no-capture completion. This does not preempt callbacks or bound begun SQL and does not add an upstream proof service, fresh clock after SQL waits or distributed permission fence. See SCHEDULER.md for source-bound tests and limits.
