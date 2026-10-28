@@ -27,6 +27,10 @@
     "./catalog-traversal": {
       "types": "./dist/catalog-traversal.d.ts",
       "default": "./dist/catalog-traversal.js"
+    },
+    "./catalog-checkpoint": {
+      "types": "./dist/catalog-checkpoint.d.ts",
+      "default": "./dist/catalog-checkpoint.js"
     }
   },
   "engines": {
