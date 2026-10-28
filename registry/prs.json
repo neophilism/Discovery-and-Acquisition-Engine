@@ -4,7 +4,7 @@
   "roadmapVersion": 1,
   "planVerified": true,
   "plannedPrCount": 6,
-  "observedAt": "2026-10-27T21:19:21Z",
+  "observedAt": "2026-10-28T06:48:57Z",
   "units": [
     {
       "id": "DAE-001",
@@ -92,7 +92,8 @@
       "prs": [],
       "contributingPrs": [
         5,
-        7
+        7,
+        8
       ],
       "dependsOn": [
         "DAE-003"
@@ -103,7 +104,7 @@
         "Durable acquisition scheduling and recovery"
       ],
       "acceptanceCriteria": "Verify required behavior, rejection paths, source-bound test evidence and private defaults; live acceptance remains separate.",
-      "implementationStatus": "Partial: PR5 implements durable scheduling/leases, one-shot consumption, verified capture/no-capture completion, pause, uncertainty recovery, atomic audit/outbox and restart tests on a separate operational database. Deployed worker daemon, external receipt-service integration and independent network-session qualification remain pending. Partial PR7: reproduce/fix blocked-JavaScript late outcome verification with monotonic admission/result gates and signal closure. Three old-main regressions fail; all four new actual restricted-migration groups and 38 ordinary tests/typecheck/build/registry pass. All eleven scheduler/deadline groups pass through freshly packed installed compiled public exports. Initial source03b2cacd125cc744dba8e525f5fdec98cb9189af passed CI40585534725/job122475823408 (38 groups), logs inspected. All final-head CI remains required. No real receipt/liveness/live clock/deployed worker qualification."
+      "implementationStatus": "Partial: PR5 implements durable scheduling/leases, one-shot consumption, verified capture/no-capture completion, pause, uncertainty recovery, atomic audit/outbox and restart tests on a separate operational database. Deployed worker daemon, external receipt-service integration and independent network-session qualification remain pending. Partial PR7: reproduce/fix blocked-JavaScript late outcome verification with monotonic admission/result gates and signal closure. Three old-main regressions fail; all four new actual restricted-migration groups and 38 ordinary tests/typecheck/build/registry pass. All eleven scheduler/deadline groups pass through freshly packed installed compiled public exports. Initial source03b2cacd125cc744dba8e525f5fdec98cb9189af passed CI40585534725/job122475823408 (38 groups), logs inspected. All final-head CI remains required. No real receipt/liveness/live clock/deployed worker qualification. Partial PR8 adds explicit consumeCurrent with required trusted live clock sampled after project-lock/stored-state read. Legacy consume remains caller-time compatible; both lock before reading. Four new restricted-migration embedded groups cover expiry, clock failure, lost acknowledgement and capture. Network/deployed clock/current identity/receipt/worker qualification and other scheduler live-clock operations remain pending."
     },
     {
       "id": "DAE-006",
