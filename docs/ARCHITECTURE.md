@@ -4,7 +4,7 @@ This library captures one explicitly approved HTTPS source at a time. Source pol
 
 Captured exact bytes carry request/final URLs, retrieval time, redirects, response metadata and SHA256. A capture is not a factual conclusion or permission to publish. Captured files must enter evidence quarantine before processing. Tests inject DNS and transport; no live capture is required.
 
-Current limits: IPv4 HTTPS only, four explicit MIME types, no bulk crawler, provider-specific archive API adapters, robots-policy evaluator or deployed worker daemon yet. The opt-in JSON archive catalog adapter, connector SDK and durable traversal checkpoint are described in CONNECTORS.md. Policy is trusted deployment configuration and must be enforced by an authenticated action gateway. A bounded total deadline covers DNS resolution, redirects and transport awaits. Cancellation reaches the transport; a timed-out resolver can never later start a transport call. Native DNS may continue its underlying OS query after the awaiting capture has failed; deployment concurrency limits remain required. Future work is retained in registry/prs.json.
+Current limits: IPv4 HTTPS only, six explicit media families including bounded WARC/ZIP capture, no bulk crawler, provider-specific archive API adapters, robots-policy evaluator or deployed worker daemon yet. The opt-in JSON archive catalog adapter, connector SDK and durable traversal checkpoint are described in CONNECTORS.md. Policy is trusted deployment configuration and must be enforced by an authenticated action gateway. A bounded total deadline covers DNS resolution, redirects and transport awaits. Cancellation reaches the transport; a timed-out resolver can never later start a transport call. Native DNS may continue its underlying OS query after the awaiting capture has failed; deployment concurrency limits remain required. Future work is retained in registry/prs.json.
 
 ## Collection acquisition contract
 
@@ -38,3 +38,7 @@ The opt-in `./catalog-checkpoint` adapter stores traversal metadata in the engin
 
 This is not archival storage or network authority. Exact catalog bytes and verified evidence receipts stay outside this checkpoint, and hosts must make a fresh authenticated/current-policy decision before each capture. The adapter issues no requests and provides no automatic retry or continuation. Migration-backed tests exercise filesystem reopen, optimistic contention and rejection rollback; independent PostgreSQL sessions, provider APIs, deployed workers and live acceptance remain separate.
 
+
+## Archive format boundary
+
+The opt-in `./archive-formats` parser inventories already captured WARC envelopes and ZIP central directories under explicit per-entry, aggregate-expansion, header and count limits. It performs no decompression or extraction and rejects unsafe paths, encryption, ZIP64, multi-disk layouts, unsupported compression and inconsistent local/central metadata. WARC payload digests and ZIP CRC/size fields preserve source-bound inventory metadata only; they do not authenticate archive statements or authorize downstream processing. See CONNECTORS.md for exact limits and qualification boundaries.
