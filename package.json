@@ -31,6 +31,10 @@
     "./catalog-checkpoint": {
       "types": "./dist/catalog-checkpoint.d.ts",
       "default": "./dist/catalog-checkpoint.js"
+    },
+    "./archive-formats": {
+      "types": "./dist/archive-formats.d.ts",
+      "default": "./dist/archive-formats.js"
     }
   },
   "engines": {
