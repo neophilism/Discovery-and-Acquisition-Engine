@@ -303,10 +303,56 @@ export class AcquisitionScheduler {
     expectedRevision: number,
     token: string,
   ): Promise<AcquisitionWork> {
-    const c = structuredClone(context);
+    return this.#consume(context, id, expectedRevision, token);
+  }
+  /** Opt-in live admission. The trusted clock is sampled after the project lock and stored read. */
+  async consumeCurrent(
+    context: Context,
+    id: string,
+    expectedRevision: number,
+    token: string,
+    clock: () => string,
+  ): Promise<AcquisitionWork> {
+    invariant(
+      typeof clock === "function",
+      "invalid_clock",
+      "Trusted live clock required",
+    );
+    return this.#consume(context, id, expectedRevision, token, clock);
+  }
+  async #consume(
+    context: Context,
+    id: string,
+    expectedRevision: number,
+    token: string,
+    clock?: () => string,
+  ): Promise<AcquisitionWork> {
+    let c = structuredClone(context);
     this.#guard(c, "worker");
     return scoped(this.#db, c, async (tx) => {
+      // get() alone does not lock. Hold the owning project lock BEFORE loading admission state.
+      await tx.audit("discovery.schedule.consume.checked", {
+        collectionId: id,
+      });
       const old = await this.#read(tx, c, id);
+      if (clock) {
+        let now: string;
+        try {
+          now = clock();
+          nonempty(now, "Live time", 64);
+          invariant(
+            validTime(now) >= validTime(c.now),
+            "invalid_time",
+            "Live clock regressed",
+          );
+        } catch {
+          throw new DomainError(
+            "clock_unavailable",
+            "Current time could not be established",
+          );
+        }
+        c = { ...c, now };
+      }
       this.#expected(old, expectedRevision);
       const lease = this.#lease(c, old.state, token);
       invariant(
