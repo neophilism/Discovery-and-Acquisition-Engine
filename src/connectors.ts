@@ -38,7 +38,7 @@ export interface JsonArchiveConfiguration {
   itemPolicy: SourcePolicy;
   maximumEntries: number;
 }
-const types = ['text/plain', 'text/html', 'application/json', 'application/pdf', 'application/warc', 'application/zip'];
+const types = ['text/plain', 'text/html', 'application/json', 'application/pdf'];
 const maximumCatalogBytes = 1024 * 1024;
 
 function policyAdmission(context: Context, policy: SourcePolicy): void {
