@@ -42,3 +42,5 @@ This is not archival storage or network authority. Exact catalog bytes and verif
 ## Archive format boundary
 
 The opt-in `./archive-formats` parser inventories already captured WARC envelopes and ZIP central directories under explicit per-entry, aggregate-expansion, header and count limits. It performs no decompression or extraction and rejects unsafe paths, encryption, ZIP64, multi-disk layouts, unsupported compression and inconsistent local/central metadata. WARC payload digests and ZIP CRC/size fields preserve source-bound inventory metadata only; they do not authenticate archive statements or authorize downstream processing. See CONNECTORS.md for exact limits and qualification boundaries.
+
+POSTGRES_TESTS.md defines six independent PostgreSQL17 scheduler-session scenarios, separate from embedded timing-hook tests and production qualification. Canonical migration, restricted authenticated LOGIN, directly observed lock waits, explicit disposable empty loopback target and no-reset rules apply. Current-head CI execution remains required.
