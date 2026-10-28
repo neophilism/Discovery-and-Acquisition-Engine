@@ -237,7 +237,31 @@ export class AcquisitionScheduler {
     expectedRevision: number,
     commandId: string,
   ): Promise<{ snapshot: ScheduleSnapshot; lease: AcquisitionLease }> {
-    const c = structuredClone(context);
+    return this.#leaseNext(context, id, expectedRevision, commandId);
+  }
+  /** Fresh lease timing; historical command replay is never execution authority. */
+  async leaseNextCurrent(
+    context: Context,
+    id: string,
+    expectedRevision: number,
+    commandId: string,
+    clock: () => string,
+  ): Promise<{ snapshot: ScheduleSnapshot; lease: AcquisitionLease }> {
+    invariant(
+      typeof clock === "function",
+      "invalid_clock",
+      "Trusted live clock required",
+    );
+    return this.#leaseNext(context, id, expectedRevision, commandId, clock);
+  }
+  async #leaseNext(
+    context: Context,
+    id: string,
+    expectedRevision: number,
+    commandId: string,
+    clock?: () => string,
+  ): Promise<{ snapshot: ScheduleSnapshot; lease: AcquisitionLease }> {
+    let c = structuredClone(context);
     this.#guard(c, "worker");
     return scoped(this.#db, c, (tx) =>
       tx.idempotent(
@@ -245,6 +269,24 @@ export class AcquisitionScheduler {
         this.#command(c, { type: "lease", id, expectedRevision }),
         async () => {
           const old = await this.#read(tx, c, id);
+          if (clock) {
+            let now: string;
+            try {
+              now = clock();
+              nonempty(now, "Live time", 64);
+              invariant(
+                validTime(now) >= validTime(c.now),
+                "invalid_time",
+                "Live clock regressed",
+              );
+            } catch {
+              throw new DomainError(
+                "clock_unavailable",
+                "Current time could not be established",
+              );
+            }
+            c = { ...c, now };
+          }
           this.#expected(old, expectedRevision);
           invariant(
             old.state.enabled,
