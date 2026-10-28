@@ -104,7 +104,7 @@ export const pinnedHttpsTransport: CaptureTransport = (url, options) =>
         headers: {
           "User-Agent": options.userAgent,
           "Accept-Encoding": "identity",
-          Accept: "text/plain,text/html,application/json,application/pdf",
+          Accept: "text/plain,text/html,application/json,application/pdf,application/warc,application/zip",
         },
       },
       (res) => {
@@ -303,6 +303,9 @@ export async function capture(
           "text/html",
           "application/json",
           "application/pdf",
+          "application/warc",
+          "application/zip",
+          "application/x-zip-compressed",
         ].includes(contentType),
         "unsupported_media",
         "Source content type is unsupported",
