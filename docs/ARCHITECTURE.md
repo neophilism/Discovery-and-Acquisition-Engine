@@ -29,3 +29,5 @@ Receipt completion verification uses monotonic admission/result fences in additi
 The explicit consumeCurrent operation now samples a required trusted live clock after locked stored-state admission. Legacy consume and other scheduler operations retain caller-time semantics. This does not add current external Identity policy or a deployed receipt/worker service. See SCHEDULER.md.
 
 leaseNextCurrent adds explicit post-lock live-clock lease creation, complementing consumeCurrent. Legacy leaseNext remains caller-time compatible and cached lease replay stays historical; no renewed execution authority is returned. Other scheduler clocks and deployed services remain pending. See SCHEDULER.md.
+
+recoverCurrent adds explicit post-lock current expiry recovery while retaining consumed uncertainty/capacity until verified resolution. Legacy recovery stays caller-time based and cached results stay historical; no retries, quiescence proof or deployed services are introduced. See SCHEDULER.md.

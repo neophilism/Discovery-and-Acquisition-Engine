@@ -609,7 +609,31 @@ export class AcquisitionScheduler {
     expectedRevision: number,
     commandId: string,
   ): Promise<ScheduleSnapshot> {
-    const c = structuredClone(context);
+    return this.#recover(context, id, expectedRevision, commandId);
+  }
+  /** Current expiry observation only: consumed work never becomes retryable. */
+  async recoverCurrent(
+    context: Context,
+    id: string,
+    expectedRevision: number,
+    commandId: string,
+    clock: () => string,
+  ): Promise<ScheduleSnapshot> {
+    invariant(
+      typeof clock === "function",
+      "invalid_clock",
+      "Trusted live clock required",
+    );
+    return this.#recover(context, id, expectedRevision, commandId, clock);
+  }
+  async #recover(
+    context: Context,
+    id: string,
+    expectedRevision: number,
+    commandId: string,
+    clock?: () => string,
+  ): Promise<ScheduleSnapshot> {
+    let c = structuredClone(context);
     this.#guard(c);
     return scoped(this.#db, c, (tx) =>
       tx.idempotent(
@@ -617,6 +641,24 @@ export class AcquisitionScheduler {
         this.#command(c, { type: "recover", id, expectedRevision }),
         async () => {
           const old = await this.#read(tx, c, id);
+          if (clock) {
+            let now: string;
+            try {
+              now = clock();
+              nonempty(now, "Live time", 64);
+              invariant(
+                validTime(now) >= validTime(c.now),
+                "invalid_time",
+                "Live clock regressed",
+              );
+            } catch {
+              throw new DomainError(
+                "clock_unavailable",
+                "Current time could not be established",
+              );
+            }
+            c = { ...c, now };
+          }
           this.#expected(old, expectedRevision);
           let collection = old.state.collection,
             changed = false;
