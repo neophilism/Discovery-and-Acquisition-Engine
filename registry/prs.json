@@ -4,7 +4,7 @@
   "roadmapVersion": 1,
   "planVerified": true,
   "plannedPrCount": 6,
-  "observedAt": "2026-10-28T09:30:00Z",
+  "observedAt": "2026-10-28T09:37:00Z",
   "units": [
     {
       "id": "DAE-001",
@@ -64,7 +64,7 @@
         "Connector SDK and archive adapters"
       ],
       "acceptanceCriteria": "Verify required behavior, rejection paths, source-bound test evidence and private defaults; live acceptance remains separate.",
-      "implementationStatus": "Partial: PR4 implements the connector SDK and bounded JSON archive catalog adapter with exact provenance and separately authorized acquisition proposals. PR6 adds bounded explicit in-memory cross-page planning with provenance-preserving reconciliation and loop fencing. PR13 implements an opt-in engine-owned durable traversal checkpoint with exact scope/purpose/configuration/limit binding, optimistic revision control, restart-safe resume and migration-backed atomic rejection tests; exact head c0e359680b9fdecbaa375526d7c16ab301fa01bb passed Engine checks run 40663074675, squash merge 9e7ebc2e7321c26f3b0ca5f3c592aa5748c833df passed merged-main run 40663314903, and conflicted draft PR12 was superseded. Provider-specific archive APIs, WARC/ZIP parsing, deployed orchestration and live qualification remain pending. Draft PR14 adds bounded WARC envelope and ZIP central/local metadata inventory with exact capture admission, safe-path and expansion fencing, without decompression, extraction or provider/live claims; hosted validation is pending."
+      "implementationStatus": "Partial: PR4 implements the connector SDK and bounded JSON archive catalog adapter with exact provenance and separately authorized acquisition proposals. PR6 adds bounded explicit in-memory cross-page planning with provenance-preserving reconciliation and loop fencing. PR13 implements an opt-in engine-owned durable traversal checkpoint with exact scope/purpose/configuration/limit binding, optimistic revision control, restart-safe resume and migration-backed atomic rejection tests; exact head c0e359680b9fdecbaa375526d7c16ab301fa01bb passed Engine checks run 40663074675, squash merge 9e7ebc2e7321c26f3b0ca5f3c592aa5748c833df passed merged-main run 40663314903, and conflicted draft PR12 was superseded. Provider-specific archive APIs, WARC/ZIP parsing, deployed orchestration and live qualification remain pending. PR14 adds bounded WARC envelope and ZIP central/local metadata inventory with exact capture admission, safe-path and expansion fencing, without decompression, extraction or provider/live claims; exact head 645924c9f2e6b29171661084a28dca7002367ddc passed Engine checks run 40665159402, squash merge 1da80eaa49306845fceb07ba2e88171a2e9e89b3 passed merged-main run 40665425964."
     },
     {
       "id": "DAE-004",
