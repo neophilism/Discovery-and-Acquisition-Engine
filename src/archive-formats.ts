@@ -113,7 +113,7 @@ export function parseWarc(context: Context, sourcePolicy: SourcePolicy, input: C
 function view(bytes: Uint8Array): DataView { return new DataView(bytes.buffer,bytes.byteOffset,bytes.byteLength); }
 function name(bytes: Uint8Array, utf8: boolean): string {
   if(!utf8) invariant(bytes.every(value=>value>=0x20&&value<=0x7e),'invalid_zip','Legacy ZIP names must be printable ASCII');
-  let value:string; try{value=new TextDecoder('utf-8',{fatal:true}).decode(bytes);}catch{invariant(false,'invalid_zip','ZIP member name is not valid UTF-8');}
+  let value=''; try{value=new TextDecoder('utf-8',{fatal:true}).decode(bytes);}catch{invariant(false,'invalid_zip','ZIP member name is not valid UTF-8');}
   invariant(value.length>0&&value.length<=4096&&!value.includes('\\')&&!value.includes('\0')&&!value.startsWith('/')&&!/^[A-Za-z]:/.test(value)&&!value.endsWith('/'), 'unsafe_archive_path','ZIP member path is unsafe');
   invariant(value.split('/').every(part=>part!==''&&part!=='.'&&part!=='..'),'unsafe_archive_path','ZIP member path is unsafe'); return value;
 }
