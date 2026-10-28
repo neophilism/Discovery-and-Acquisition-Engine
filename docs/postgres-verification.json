@@ -1,0 +1,24 @@
+{
+  "stage": "local_and_initial_network_ci_passed",
+  "ordinaryTestsPassed": 61,
+  "postgresGroupsPassed": 6,
+  "initialCi": {
+    "source": "b737bedbb44b0eac5b8c87b43c80d13b376f187a",
+    "run": 40667313171,
+    "postgresJob": 122744967601,
+    "ordinaryJob": 122744967917,
+    "logsIndependentlyInspected": true
+  },
+  "sourceHashes": {
+    "integration/postgres-scheduler.test.ts": "d01d3bb3a0a9fedfb41928ffbe3227707e37dd88546c52c75c396bcbf7575117",
+    "tests/postgres-fixture.test.ts": "33906bc4fb31c8e11b93fd8be9d3d94e5bc53670dceb66642f6fa39d3d9bebd9",
+    "tsconfig.postgres.json": "0a3fe2d3a92ee9adf8a798fa54e50b3a9ca2e959a477f54755a802b53594b3b3",
+    ".github/workflows/ci.yml": "5dca195025265a310014fb63d597f507efa26aa6deccd5f94f22a089dc238336",
+    "src/contracts.ts": "d86141cb7546a723f837a298e4ea6fef62692918f78f5aab2d72d6639987fcc5",
+    "src/scheduler.ts": "265870b1de80c9d1b696447d9d4738c6efe2df963a9cfa265660b88fcdbf68d3"
+  },
+  "localPostgresExecution": "not_available",
+  "newInstalledRuntimeClaim": "none_runtime_unchanged",
+  "productionQualification": "not_performed",
+  "finalHeadCi": "required_before_merge"
+}
