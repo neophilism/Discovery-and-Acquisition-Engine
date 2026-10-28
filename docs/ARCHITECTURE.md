@@ -4,7 +4,7 @@ This library captures one explicitly approved HTTPS source at a time. Source pol
 
 Captured exact bytes carry request/final URLs, retrieval time, redirects, response metadata and SHA256. A capture is not a factual conclusion or permission to publish. Captured files must enter evidence quarantine before processing. Tests inject DNS and transport; no live capture is required.
 
-Current limits: IPv4 HTTPS only, four explicit MIME types, no bulk crawler, provider-specific archive API adapters, robots-policy evaluator or deployed worker daemon yet. The opt-in JSON archive catalog adapter and connector SDK are described in CONNECTORS.md. Policy is trusted deployment configuration and must be enforced by an authenticated action gateway. A bounded total deadline covers DNS resolution, redirects and transport awaits. Cancellation reaches the transport; a timed-out resolver can never later start a transport call. Native DNS may continue its underlying OS query after the awaiting capture has failed; deployment concurrency limits remain required. Future work is retained in registry/prs.json.
+Current limits: IPv4 HTTPS only, four explicit MIME types, no bulk crawler, provider-specific archive API adapters, robots-policy evaluator or deployed worker daemon yet. The opt-in JSON archive catalog adapter, connector SDK and durable traversal checkpoint are described in CONNECTORS.md. Policy is trusted deployment configuration and must be enforced by an authenticated action gateway. A bounded total deadline covers DNS resolution, redirects and transport awaits. Cancellation reaches the transport; a timed-out resolver can never later start a transport call. Native DNS may continue its underlying OS query after the awaiting capture has failed; deployment concurrency limits remain required. Future work is retained in registry/prs.json.
 
 ## Collection acquisition contract
 
@@ -29,3 +29,10 @@ Receipt completion verification uses monotonic admission/result fences in additi
 The explicit consumeCurrent operation now samples a required trusted live clock after locked stored-state admission. Legacy consume and other scheduler operations retain caller-time semantics. This does not add current external Identity policy or a deployed receipt/worker service. See SCHEDULER.md.
 
 leaseNextCurrent adds explicit post-lock live-clock lease creation, complementing consumeCurrent. Legacy leaseNext remains caller-time compatible and cached lease replay stays historical; no renewed execution authority is returned. Other scheduler clocks and deployed services remain pending. See SCHEDULER.md.
+
+## Durable catalog traversal metadata
+
+The opt-in `./catalog-checkpoint` adapter stores traversal metadata in the engine's dedicated operational database with exact scope, purpose, connector-configuration and aggregate-limit binding. Creation and page append use the Evidence database SDK's revision comparison, project transaction lock, audit trail and minimal outbox notification. A restart can load the last committed revision and continue only from its explicit normalized `nextUrl`; stale or differently bound callers fail closed.
+
+This is not archival storage or network authority. Exact catalog bytes and verified evidence receipts stay outside this checkpoint, and hosts must make a fresh authenticated/current-policy decision before each capture. The adapter issues no requests and provides no automatic retry or continuation. Migration-backed tests exercise filesystem reopen, optimistic contention and rejection rollback; independent PostgreSQL sessions, provider APIs, deployed workers and live acceptance remain separate.
+
