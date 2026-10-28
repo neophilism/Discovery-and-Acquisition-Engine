@@ -167,6 +167,10 @@ test(
       ),
     ]);
     assert.equal(r.filter((v) => v.status === "fulfilled").length, 1);
+    const denied = r.find(
+      (v) => v.status === "rejected",
+    ) as PromiseRejectedResult;
+    assert.equal(denied.reason.code, "revision_conflict");
     assert.equal(
       (await f.sb.load(f.c, "collection")).state.leases[0]!.status,
       "running",
