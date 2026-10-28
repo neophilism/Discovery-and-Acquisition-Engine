@@ -27,3 +27,5 @@ The opt-in `./scheduler` adapter persists approved collection scheduling, actor-
 Receipt completion verification uses monotonic admission/result fences in addition to its timer, closes owned signals on every exit and sanitizes callback errors. A reproduced blocked-event-loop late result cannot commit captured/no-capture completion. This does not preempt callbacks or bound begun SQL and does not add an upstream proof service, fresh clock after SQL waits or distributed permission fence. See SCHEDULER.md for source-bound tests and limits.
 
 The explicit consumeCurrent operation now samples a required trusted live clock after locked stored-state admission. Legacy consume and other scheduler operations retain caller-time semantics. This does not add current external Identity policy or a deployed receipt/worker service. See SCHEDULER.md.
+
+leaseNextCurrent adds explicit post-lock live-clock lease creation, complementing consumeCurrent. Legacy leaseNext remains caller-time compatible and cached lease replay stays historical; no renewed execution authority is returned. Other scheduler clocks and deployed services remain pending. See SCHEDULER.md.
