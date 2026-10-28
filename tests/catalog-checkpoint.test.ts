@@ -100,7 +100,8 @@ async function fixture(
   await pg.exec(
     "CREATE ROLE catalog_checkpoint_test LOGIN NOINHERIT NOSUPERUSER NOBYPASSRLS NOCREATEDB NOCREATEROLE NOREPLICATION; GRANT evidence_runtime TO catalog_checkpoint_test; SET SESSION AUTHORIZATION catalog_checkpoint_test",
   );
-  let store = new CatalogCheckpointStore(driver(pg), configuration, limits);
+  let database = driver(pg),
+    store = new CatalogCheckpointStore(database, configuration, limits);
   t.after(async () => {
     if (!closed) await pg.close();
     if (path) await rm(path, { recursive: true, force: true });
@@ -109,13 +110,17 @@ async function fixture(
     get store() {
       return store;
     },
+    get database() {
+      return database;
+    },
     async restart() {
       assert(path);
       await pg.close();
       closed = true;
       pg = new PGlite(path);
       await pg.exec("SET SESSION AUTHORIZATION catalog_checkpoint_test");
-      store = new CatalogCheckpointStore(driver(pg), configuration, limits);
+      database = driver(pg);
+      store = new CatalogCheckpointStore(database, configuration, limits);
       closed = false;
     },
   };
@@ -205,7 +210,7 @@ test("scope purpose configuration sequence and stale revision rejection are atom
   ])
     await assert.rejects(operation);
   const changedLimits = new CatalogCheckpointStore(
-    driver(new PGlite()),
+    f.database,
     configuration,
     { ...limits, maximumPages: 9 },
   );
