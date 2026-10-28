@@ -117,6 +117,10 @@ function name(bytes: Uint8Array, utf8: boolean): string {
   invariant(value.length>0&&value.length<=4096&&!value.includes('\\')&&!value.includes('\0')&&!value.startsWith('/')&&!/^[A-Za-z]:/.test(value)&&!value.endsWith('/'), 'unsafe_archive_path','ZIP member path is unsafe');
   invariant(value.split('/').every(part=>part!==''&&part!=='.'&&part!=='..'),'unsafe_archive_path','ZIP member path is unsafe'); return value;
 }
+function rejectZip64Extra(bytes: Uint8Array): void {
+  const data=view(bytes); let cursor=0;
+  while(cursor<bytes.length){invariant(cursor+4<=bytes.length,'invalid_zip','ZIP extra field is truncated');const id=data.getUint16(cursor,true),length=data.getUint16(cursor+2,true);cursor+=4;invariant(cursor+length<=bytes.length,'invalid_zip','ZIP extra field is truncated');invariant(id!==0x0001,'unsupported_zip','ZIP64 archives are unsupported');cursor+=length;}
+}
 /** Read the bounded ZIP central directory without extracting or decompressing members. */
 export function parseZip(context: Context, sourcePolicy: SourcePolicy, input: Capture, configured: ArchiveFormatLimits): ArchiveInventory {
   const bound=limits(configured), capture=admit(context,sourcePolicy,input,zipTypes,25*1024*1024), bytes=capture.bytes, data=view(bytes);
@@ -133,14 +137,17 @@ export function parseZip(context: Context, sourcePolicy: SourcePolicy, input: Ca
     const nameLength=data.getUint16(cursor+28,true), extraLength=data.getUint16(cursor+30,true), commentLength=data.getUint16(cursor+32,true), localOffset=data.getUint32(cursor+42,true), next=cursor+46+nameLength+extraLength+commentLength;
     invariant(next<=eocd&&(flags&1)===0&&(method===0||method===8)&&compressed!==0xffffffff&&uncompressed!==0xffffffff&&localOffset!==0xffffffff,'unsupported_zip','Encrypted, ZIP64 or unsupported-compression member');
     const memberName=name(bytes.subarray(cursor+46,cursor+46+nameLength),(flags&0x800)!==0); invariant(!names.has(memberName),'invalid_zip','Duplicate ZIP member name');
+    rejectZip64Extra(bytes.subarray(cursor+46+nameLength,cursor+46+nameLength+extraLength));
     invariant(uncompressed<=bound.maximumEntryBytes,'archive_limit','ZIP member expansion limit exceeded'); expanded+=uncompressed; invariant(expanded<=bound.maximumExpandedBytes,'archive_limit','ZIP aggregate expansion limit exceeded');
     invariant(uncompressed===0 || compressed>0, 'invalid_zip','Nonempty ZIP member has no compressed bytes');
     invariant(uncompressed===0 || uncompressed<=compressed*1000, 'archive_limit','ZIP compression ratio limit exceeded');
     invariant(localOffset+30<=directoryOffset&&data.getUint32(localOffset,true)===0x04034b50,'invalid_zip','ZIP local header is missing');
-    const localFlags=data.getUint16(localOffset+6,true), localMethod=data.getUint16(localOffset+8,true), localNameLength=data.getUint16(localOffset+26,true), localExtraLength=data.getUint16(localOffset+28,true);
+    const localFlags=data.getUint16(localOffset+6,true), localMethod=data.getUint16(localOffset+8,true), localCrc=data.getUint32(localOffset+14,true), localCompressed=data.getUint32(localOffset+18,true), localUncompressed=data.getUint32(localOffset+22,true), localNameLength=data.getUint16(localOffset+26,true), localExtraLength=data.getUint16(localOffset+28,true);
     const dataOffset=localOffset+30+localNameLength+localExtraLength;
     invariant(localFlags===flags&&localMethod===method&&dataOffset+compressed<=directoryOffset,'invalid_zip','ZIP local and central headers disagree');
     const localName=name(bytes.subarray(localOffset+30,localOffset+30+localNameLength),(flags&0x800)!==0); invariant(localName===memberName,'invalid_zip','ZIP local member name differs');
+    rejectZip64Extra(bytes.subarray(localOffset+30+localNameLength,dataOffset));
+    invariant((flags&8)!==0 || (localCrc===crc32&&localCompressed===compressed&&localUncompressed===uncompressed),'invalid_zip','ZIP local sizes or CRC differ');
     entries.push({format:'zip',id:memberName,method:method as 0|8,crc32,dataOffset,compressedLength:compressed,uncompressedLength:uncompressed}); names.add(memberName); cursor=next;
   }
   invariant(cursor===eocd,'invalid_zip','ZIP central directory has undeclared data');
